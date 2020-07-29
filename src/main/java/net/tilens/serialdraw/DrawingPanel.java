@@ -3,35 +3,36 @@ package net.tilens.serialdraw;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.util.Random;
-
 import javax.swing.JPanel;
 
 /**
- * razred namenjen risanju kvadratov
+ * Class intended for drawing pixels to Canvas
+ * @author TilenS
+ * @author Znidi
+ * @author JurijTSL
  */
 public class DrawingPanel extends JPanel {
-
 	private static final long serialVersionUID = 7774158272893625426L;
 	
 	private int vert, hor, lineWidth;
 	private Color lineColor;
 	private Color backgroundColor;
-	private Color[][] kjeBarvam;
+	private Color[][] whereToColor;
+	
 	/**
-	 * vzame se default line width 1px in črna barva za črte ter belo ozadje
-	 * @param vert koliko pokončnih črt
-	 * @param hor koliko ležečih črt
+	 * Function draws <i>vert</i> number of vertical lines and <i>hor</i> number of horizontal lines.
+	 * @param vert Number of vertical lines
+	 * @param hor Number of horizontal lines
 	 */
 	public DrawingPanel(int vert, int hor) {
 		this(vert, hor, 1);
 	}
 	
 	/**
-	 * vzame se default črna barva črte in belo ozadje
-	 * @param vert koliko pokončnih črt 
-	 * @param hor koliko ležečih črt
-	 * @param lineWidth debelina črte
+	 * Function draws <i>vert</i> number of vertical lines and <i>hor</i> number of horizontal lines with width of <i>lineWidth</i>.
+	 * @param vert Number of vertical lines
+	 * @param hor Number of horizontal lines
+	 * @param lineWidth Width of lines
 	 
 	 */
 	public DrawingPanel(int vert, int hor, int lineWidth) {
@@ -39,23 +40,24 @@ public class DrawingPanel extends JPanel {
 	}
 	
 	/**
-	 * vzame se belo ozadje
-	 * @param vert koliko pokončnih črt 
-	 * @param hor koliko ležečih črt
-	 * @param lineWidth debelina črte
-	 * @param lineColor barva črte
-	 
+	 * Function draws <i>vert</i> number of vertical lines and <i>hor</i> number of horizontal lines with width of <i>lineWidth</i> and color of <i>lineColor</i>.
+	 * @param vert Number of vertical lines
+	 * @param hor Number of horizontal lines
+	 * @param lineWidth Width of lines
+	 * @param lineColor Line color
 	 */
 	public DrawingPanel(int vert, int hor, int lineWidth, Color lineColor) {
 		this(vert, hor, lineWidth, lineColor, Color.WHITE);
 	}
+	
 	/**
 	 * 
-	 * @param vert koliko pokončnih črt 
-	 * @param hor koliko ležečih črt
-	 * @param lineWidth debelina črte
-	 * @param lineColor barva črte
-	 * @param backgroundColor barva ozadja
+	 * <p>Function draws <i>vert</i> number of vertical lines and <i>hor</i> number of horizontal lines with width of <i>lineWidth</i> and color of <i>lineColor</i>.</p>
+	 * <p>It sets background to color of <i>backgroundColor</i>.
+	 * @param vert Number of vertical lines
+	 * @param hor Number of horizontal lines
+	 * @param lineWidth Width of lines
+	 * @param backgroundColor Background color
 	 
 	 */
 	public DrawingPanel(int vert, int hor, int lineWidth, Color lineColor, Color backgroundColor) {
@@ -64,12 +66,11 @@ public class DrawingPanel extends JPanel {
 		this.lineWidth = lineWidth;
 		this.lineColor = lineColor;
 		this.backgroundColor = backgroundColor;
-		kjeBarvam = new Color[vert][hor];
+		whereToColor = new Color[vert][hor];
 	}
 	
 	/**
-	 * funkcija, ki se kliče ob vsake ponovnem risanju komponente
-	 
+	 * Function is called when drawing of component starts
 	 */
 	public void paintComponent(Graphics g) {
 		Dimension d = this.getSize();
@@ -77,22 +78,23 @@ public class DrawingPanel extends JPanel {
 		int horSpace = d.height/hor;
 		int maxHeight = horSpace*hor;
 		int maxWidth = vertSpace*vert;
-        // začnemo najprej risat črte
+		
+        //Firstly, we draw lines
 		g.setColor(lineColor);
 		for(int i = 0; i<=vert; i++) {
-			g.fillRect(i *vertSpace, 0, lineWidth, maxHeight);//bomo risali pravokotnike zato, da lahko namesto tretjega parametra napišeš kolk pixlov je široka zadeva
+			g.fillRect(i *vertSpace, 0, lineWidth, maxHeight);
 			
 		}
 		for(int i = 0; i<=hor;i++) {
 			g.fillRect(0, i*horSpace, maxWidth, lineWidth);
 		}
         
-        for (int i = 0; i < kjeBarvam.length; i++) {
-			for (int j = 0; j < kjeBarvam[i].length; j++) {
-				if(kjeBarvam[i][j]==null) {
+        for (int i = 0; i < whereToColor.length; i++) {
+			for (int j = 0; j < whereToColor[i].length; j++) {
+				if(whereToColor[i][j]==null) {
 					g.setColor(backgroundColor);
 				}else {
-					g.setColor(kjeBarvam[i][j]);	
+					g.setColor(whereToColor[i][j]);	
 				}
 				g.fillRect(i*vertSpace +lineWidth, j*horSpace +lineWidth, vertSpace-lineWidth, horSpace-lineWidth);
 			}
@@ -100,73 +102,74 @@ public class DrawingPanel extends JPanel {
     }
 
 	/**
-	 * barva se nastavi na default črno
-	 * @param x mesto kvadrata v vrstici
-	 * @param y mesto kvadrata v stolpcu
-	 
+	 * Function draws pixel with coordinates <i>x</i> and <i>y</i> with black color.
+	 * @param x Pixel position in a row
+	 * @param y Pixel position in a column
 	 */
-	public void risiKvadrat(int x, int y) {
-		risiKvadrat(x, y, Color.BLACK);
+	public void drawPixel(int x, int y) {
+		drawPixel(x, y, Color.BLACK);
 	}
 	
 	/**
-	 * funkcija pobarva kvadrat mreže z željeno barvo
-	 * @param x mesto kvadrata v vrstici
-	 * @param y mesto kvadrata v stolpcu
-	 * @param c barva kvadrata
-	 
+	 * Function draws pixel with coordinates <i>x</i> and <i>y</i> with color of <i>color</i>.
+	 * @param x Pixel position in a row
+	 * @param y Pixel position in a column
+	 * @param color Color of pixel
 	 */
-	public void risiKvadrat(int x, int y, Color c) {
+	public void drawPixel(int x, int y, Color color) {
 		if(x>=0&&x<vert) {
 			if(y>=0&&y<hor) {
-				kjeBarvam[x][y]=c;
+				whereToColor[x][y]=color;
 			}
 		}
 		repaint();
 	}
 	
 	/**
-	 * funkcija pobriše kvadrat iz mreže
-	 * @param x mesto kvadrata v vrstici
-	 * @param y mesto kvadrata v stolpcu
-	 
+	 * Function removes pixel from the canvas.
+	 * @param x Pixel position in a row
+	 * @param y Pixel position in a column
 	 */
-	public void brisiKvadrat(int x, int y) {
+	public void removePixel(int x, int y) {
 		if(x>=0&&x<vert) {
 			if(y>=0&&y<hor) {
-				kjeBarvam[x][y]=null;
+				whereToColor[x][y]=null;
 			}
 		}
 		repaint();
 	}
 	
 	/**
-	 * nastavimo barvo ozadja
-	 * @param c
-	 
+	 * Function sets color of canvas.
+	 * @param color Background color
 	 */
-	public void setBackground(Color c) {
-		backgroundColor = c;
+	public void setBackground(Color color) {
+		backgroundColor = color;
 		repaint();
 	}
 	
-	
+	/**
+	 * Function clears pixels from the canvas.
+	 */
 	public void clearScreen() {
 		for (int i = 0; i < 60; i++) {
 			for (int j = 0; j < 60; j++) {
-				brisiKvadrat(i, j);
+				removePixel(i, j);
 			}
 		}
 	}
 	
+	/**
+	 * Function displays prompt to connect Serial.
+	 */
 	public void connectRequest() {
 		clearScreen();
 		setBackground(Color.BLACK);
 	}
 	
 	/**
-	 * funkcija vrne željeno višino canvasa...
-	 * @return
+	 * Function return Height of canvas.
+	 * @return canvas height
 	 */
 	public int getGoodHeight() {
 		Dimension d = this.getSize();
@@ -175,10 +178,14 @@ public class DrawingPanel extends JPanel {
 	}
 	
 	/**
-	 * cyka blyaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-	 * @return
+	 * Function fills given area (From <i>startX</i>, <i>startY</i> to <i>endX</i>, <i>endY</i>) with color of <i>color</i>.
+	 * @param startX Start position in a row.
+	 * @param startX Start position in a column.
+	 * @param startX End position in a row.
+	 * @param startX End position in a column.
+	 * @param color Color of the area.
 	 */
-	public void fillArea(int startX, int startY, int endX, int endY, Color c) {
+	public void fillArea(int startX, int startY, int endX, int endY, Color color) {
 		int tempX = 0;
 		int tempY = 0;
 		if (startX>endX) {
@@ -195,7 +202,7 @@ public class DrawingPanel extends JPanel {
 		
 		for(int y = startY; y < endY; y++) {
 			for(int x = startX; x < endX; x++) {
-				risiKvadrat(x, y, c);
+				drawPixel(x, y, color);
 			}
 		}
 	}
