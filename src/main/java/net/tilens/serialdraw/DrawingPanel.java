@@ -165,16 +165,26 @@ public class DrawingPanel extends JPanel {
 	public void connectRequest() {
 		clearScreen();
 		setBackground(Color.BLACK);
+		App.window.setTitle("Serial Draw - Waiting for connection");
 	}
-	
+
 	/**
-	 * Function return Height of canvas.
+	 * Function returns Height of canvas.
 	 * @return canvas height
 	 */
 	public int getGoodHeight() {
 		Dimension d = this.getSize();
 		int horSpace = d.height/hor;
 		return horSpace*hor;
+	}
+	/**
+	 * Function returns Width of canvas.
+	 * @return canvas width
+	 */
+	public int getGoodWidth() {
+		Dimension d = this.getSize();
+		int vertSpace = d.width/vert;
+		return vertSpace*vert;
 	}
 	
 	/**

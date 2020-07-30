@@ -24,8 +24,8 @@ public class ControlPanel extends JPanel implements ActionListener {
 	 */
 	public ControlPanel(String...comPorts) {
 		//Add buttons
-		connect = new JButton("connect");
-		refresh = new JButton("refresh");
+		connect = new JButton("Connect");
+		refresh = new JButton("Refresh");
 		
 		//Add dropdown and add list of available Serial ports to it
 		dropdown = new JComboBox<String>(comPorts);
@@ -69,11 +69,11 @@ public class ControlPanel extends JPanel implements ActionListener {
 	 * Toggles text of the button and its command
 	 */
 	public static void toogleConnectStatus() {
-		if(connect.getText().equals("connect")) {
-			connect.setText("disconnect");
+		if(connect.getText().equals("Connect")) {
+			connect.setText("Disconnect");
 			connect.setActionCommand("disconnect");
-		} else if(connect.getText().equals("disconnect")) {
-			connect.setText("connect");
+		} else if(connect.getText().equals("Disconnect")) {
+			connect.setText("Connect");
 			connect.setActionCommand("connect");
 		}
 	}

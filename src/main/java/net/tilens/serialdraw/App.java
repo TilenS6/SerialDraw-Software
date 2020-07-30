@@ -15,15 +15,19 @@ import jssc.SerialPortList;
  */
 
 public class App {
+	//add JFrame
+	public static JFrame window = new JFrame();
+	
+	//add Canvas
 	public static DrawingPanel canvas;
 
 	public static void main(String[] args) {
-		//add JFrame and set some parameters
-		JFrame window = new JFrame();
+		//set some parameters for JFrame
 		window.setLayout(new BorderLayout());
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		window.setSize(new Dimension(976, 999));
-		window.setResizable(false);
+		window.setResizable(true);
+		window.setTitle("Serial Draw - Waiting for connection");
 		
 		//Add canvas (the pixels are drawn here)
 		canvas = new DrawingPanel(60, 60, 0, Color.WHITE, Color.RED);
@@ -41,9 +45,30 @@ public class App {
 		window.repaint();
 		
 		//Adjust window height
-		int numOfPixels = canvas.getHeight() - canvas.getGoodHeight();
-		window.setSize(new Dimension(window.getSize().width, window.getSize().height-numOfPixels)); 
-		window.repaint();
+		resizeWindow();
 		canvas.connectRequest();
+	}
+
+	/**
+	 * Creates new and updated canvas
+	 * @param newCanvas
+	 */
+	public static void newCanvas(DrawingPanel newCanvas) {
+		window.remove(canvas);
+		canvas = newCanvas;
+		window.add(newCanvas, BorderLayout.CENTER);
+		window.validate();
+		window.repaint();
+		resizeWindow();
+	}
+	
+	/**
+	 * Resizes window responsively
+	 */
+	public static void resizeWindow() {
+		int numOfPixelsH = canvas.getHeight() - canvas.getGoodHeight();
+		int numOfPixelsW = canvas.getWidth() - canvas.getGoodWidth();
+		window.setSize(new Dimension(window.getSize().width-numOfPixelsW, window.getSize().height-numOfPixelsH)); 
+		window.repaint();
 	}
 }

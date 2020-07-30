@@ -46,11 +46,9 @@ public class SerialHandler {
 					//line equals trigger which means that Arduino is initialized and we can proceed with parsing lines
 					triggered = true;
 				}
-				
 				if(triggered) {
 					//firstly add command parameters to String[] array and separate them by comma
 					String[] parameters = line.split(",");
-					
 					//first parameter equals "p". Proceed with drawing pixel accordingly
 					if(parameters[0].equals("p")) {
 						if(parameters.length < 4) {
@@ -62,7 +60,6 @@ public class SerialHandler {
 							comPort.writeBytes("k".getBytes(), 1);
 						}
 					}
-					
 					//first parameter equals "b", proceed with setting background accordingly
 					else if(parameters[0].equals("b")){
 						if(parameters.length < 2) {
@@ -73,7 +70,6 @@ public class SerialHandler {
 							comPort.writeBytes("k".getBytes(), 1);
 						}
 					}
-					
 					//first parameter equals "a", proceed with filling an area accordingly
 					else if(parameters[0].equals("a")){
 						if(parameters.length < 6) {
@@ -84,7 +80,6 @@ public class SerialHandler {
 							comPort.writeBytes("k".getBytes(), 1);
 						}
 					}
-					
 					//first parameter equals "c", proceed with removing pixel accordingly
 					else if(parameters[0].equals("c")){
 						if(parameters.length < 3) {
@@ -95,7 +90,6 @@ public class SerialHandler {
 							comPort.writeBytes("k".getBytes(), 1);
 						}
 					}
-					
 					//first parameter equals "l", proceed with clearing the canvas
 					else if(parameters[0].equals("l")){
 						if(parameters.length < 1) {
@@ -103,6 +97,26 @@ public class SerialHandler {
 							System.err.println("Command unfinished");
 						} else {
 							App.canvas.clearScreen();
+							comPort.writeBytes("k".getBytes(), 1);
+						}
+					}
+					//first parameter equals "t", proceed with setting window title
+					else if(parameters[0].equals("t")){
+						if(parameters.length < 2) {
+							comPort.writeBytes("k".getBytes(), 1);
+							System.err.println("Command unfinished");
+						} else {
+							App.window.setTitle("Serial Draw - " + parameters[1]);
+							comPort.writeBytes("k".getBytes(), 1);
+						}
+					}
+					//first parameter equals "r", proceed with setting resolution
+					else if(parameters[0].equals("r")){
+						if(parameters.length < 2) {
+							comPort.writeBytes("k".getBytes(), 1);
+							System.err.println("Command unfinished");
+						} else {
+							App.newCanvas(new DrawingPanel(Integer.parseInt(parameters[1]), Integer.parseInt(parameters[2]), 0, Color.WHITE));
 							comPort.writeBytes("k".getBytes(), 1);
 						}
 					}
