@@ -4,7 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import net.arikia.dev.drpc.DiscordRPC;
+import net.arikia.dev.drpc.DiscordRichPresence;
 
 /**
  * Class for handling ControlPanel
@@ -17,6 +21,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 	private static JButton connect;
 	private JButton refresh;
 	private JComboBox<String> dropdown;
+	private static JLabel scoreDisplay; 
 	
 	/**
 	 * Create ControlPanel and add list of available Serial ports to dropdown
@@ -26,6 +31,9 @@ public class ControlPanel extends JPanel implements ActionListener {
 		//Add buttons
 		connect = new JButton("Connect");
 		refresh = new JButton("Refresh");
+		
+		//Add score counter
+		scoreDisplay = new JLabel("Score: 0");
 		
 		//Add dropdown and add list of available Serial ports to it
 		dropdown = new JComboBox<String>(comPorts);
@@ -47,6 +55,7 @@ public class ControlPanel extends JPanel implements ActionListener {
 		add(dropdown);
 		add(connect);
 		add(refresh);
+		add(scoreDisplay);
 	}
 	
 	/**
@@ -94,5 +103,24 @@ public class ControlPanel extends JPanel implements ActionListener {
 				SerialHandler.refresh();
 				break;
 		}
+	}
+	
+	/**
+	 * Function sets score display accordingly and update rich presence
+	 * @param score Current score
+	 */
+	public static void updateScore(int score) {
+		//set text
+		scoreDisplay.setText("Score: " + score);
+		
+		//update rich presence
+		DiscordRPC.discordInitialize("738447687615250463", null, true);
+		DiscordRichPresence rich = new DiscordRichPresence
+				.Builder("Score: " + score)
+				.setDetails(SerialHandler.gameTitle)
+				.setBigImage("smiley", "SerialDraw by TilenS and JurijTSL")
+				.setSmallImage("arduino_comm_icon", "Running on Arduino")
+				.build();
+		DiscordRPC.discordUpdatePresence(rich);
 	}
 }

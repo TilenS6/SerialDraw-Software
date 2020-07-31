@@ -6,6 +6,9 @@ import com.fazecast.jSerialComm.SerialPort;
 import com.fazecast.jSerialComm.SerialPortDataListener;
 import com.fazecast.jSerialComm.SerialPortEvent;
 
+import net.arikia.dev.drpc.DiscordRPC;
+import net.arikia.dev.drpc.DiscordRichPresence;
+
 /**
  * Class for handling Serial Communication
  * @author TilenS
@@ -15,6 +18,7 @@ import com.fazecast.jSerialComm.SerialPortEvent;
 public class SerialHandler {
 	private static SerialPort comPort;
 	private static boolean triggered;
+	public static String gameTitle;
 	
 	/**
 	 * Function connects to Serial and handles parsing of commands
@@ -76,7 +80,8 @@ public class SerialHandler {
 							comPort.writeBytes("k".getBytes(), 1);
 							System.err.println("Command unfinished");
 						} else {
-							App.canvas.fillArea(Integer.parseInt(parameters[1]), Integer.parseInt(parameters[2]), Integer.parseInt(parameters[3]), Integer.parseInt(parameters[4]), strToColor(parameters[5]));
+							App.canvas.fillArea(Integer.parseInt(parameters[1]), Integer.parseInt(parameters[2]), Integer.parseInt(parameters[3]), Integer.parseInt(parameters[4]), /*strToColor(parameters[5])*/Color.white);
+							//App.canvas.fillArea(3, 4, 6, 7, Color.white);
 							comPort.writeBytes("k".getBytes(), 1);
 						}
 					}
@@ -106,7 +111,21 @@ public class SerialHandler {
 							comPort.writeBytes("k".getBytes(), 1);
 							System.err.println("Command unfinished");
 						} else {
+							//update window title
 							App.window.setTitle("Serial Draw - " + parameters[1]);
+							
+							//update gameTitle String
+							gameTitle = parameters[1];
+							
+							//update rich presence
+							DiscordRPC.discordInitialize("738447687615250463", null, true);
+							DiscordRichPresence rich = new DiscordRichPresence
+									.Builder("Score: xx")
+									.setDetails(parameters[1])
+									.setBigImage("smiley", "SerialDraw by TilenS and JurijTSL")
+									.setSmallImage("arduino_comm_icon", "Running on Arduino")
+									.build();
+							DiscordRPC.discordUpdatePresence(rich);
 							comPort.writeBytes("k".getBytes(), 1);
 						}
 					}
@@ -117,6 +136,16 @@ public class SerialHandler {
 							System.err.println("Command unfinished");
 						} else {
 							App.newCanvas(new DrawingPanel(Integer.parseInt(parameters[1]), Integer.parseInt(parameters[2]), 0, Color.WHITE));
+							comPort.writeBytes("k".getBytes(), 1);
+						}
+					}
+					//first parameter equals "s", proceed with updating score cound
+					else if(parameters[0].equals("s")){
+						if(parameters.length < 2) {
+							comPort.writeBytes("k".getBytes(), 1);
+							System.err.println("Command unfinished");
+						} else {
+							ControlPanel.updateScore(Integer.parseInt(parameters[1]));
 							comPort.writeBytes("k".getBytes(), 1);
 						}
 					}
@@ -148,6 +177,19 @@ public class SerialHandler {
 		//Toggle button and display prompt to connect Serial
 		ControlPanel.toogleConnectStatus();
 		App.canvas.connectRequest();
+		
+		//update rich presence
+		DiscordRPC.discordInitialize("738447687615250463", null, true);
+		DiscordRichPresence rich = new DiscordRichPresence
+				.Builder("Waiting for connection")
+				.setDetails("Idling")
+				.setBigImage("smiley", "SerialDraw by TilenS and JurijTSL")
+				.setSmallImage("arduino_comm_icon", "Running on Arduino")
+				.build();
+		DiscordRPC.discordUpdatePresence(rich);
+		
+		//set score counter to 0
+		ControlPanel.updateScore(0);
 	}
 	
 	/**

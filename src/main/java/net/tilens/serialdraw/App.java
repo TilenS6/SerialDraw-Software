@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JFrame;
 import jssc.SerialPortList;
+import net.arikia.dev.drpc.DiscordRPC;
+import net.arikia.dev.drpc.DiscordRichPresence;
 
 
 /**
@@ -47,6 +49,16 @@ public class App {
 		//Adjust window height
 		resizeWindow();
 		canvas.connectRequest();
+	    
+		//Add Discord Rich Presence
+		DiscordRPC.discordInitialize("738447687615250463", null, true);
+		DiscordRichPresence rich = new DiscordRichPresence
+				.Builder("Waiting for connection")
+				.setDetails("Idling")
+				.setBigImage("smiley", "SerialDraw by TilenS and JurijTSL")
+				.setSmallImage("arduino_comm_icon", "Running on Arduino")
+				.build();
+		DiscordRPC.discordUpdatePresence(rich);
 	}
 
 	/**

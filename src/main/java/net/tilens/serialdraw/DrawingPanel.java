@@ -195,9 +195,13 @@ public class DrawingPanel extends JPanel {
 	 * @param startX End position in a column.
 	 * @param color Color of the area.
 	 */
+	
+	boolean drawed = false;
+	
 	public void fillArea(int startX, int startY, int endX, int endY, Color color) {
 		int tempX = 0;
 		int tempY = 0;
+		drawed = false;
 		if (startX>endX) {
 			tempX = startX;
 			startX = endX;
@@ -210,9 +214,25 @@ public class DrawingPanel extends JPanel {
 			endY = tempY;
 		}
 		
-		for(int y = startY; y < endY; y++) {
-			for(int x = startX; x < endX; x++) {
-				drawPixel(x, y, color);
+		if (startX == endX) {
+			for (int y = startY; y < endY+1; y++) {
+				drawPixel(startX, y, color);
+				drawed = true;
+			}
+		}
+		
+		if (startY == endY) {
+			for (int x = startX; x < endX+1; x++) {
+				drawPixel(x, startY, color);
+				drawed = true;
+			}
+		}
+		
+		if (!drawed) {
+			for(int y = startY; y < endY+1; y++) {
+				for(int x = startX; x < endX; x++) {
+					drawPixel(x, y, color);
+				}
 			}
 		}
 	}
