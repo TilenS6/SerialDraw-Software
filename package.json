@@ -1,0 +1,24 @@
+{
+    "name": "serial-draw-software",
+    "version": "1.0.0",
+    "description": "A software client for SerialDraw Library.",
+    "main": "main.js",
+    "scripts": {
+        "dev": "electron .",
+        "devrebuild": "electron-rebuild"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:TilenS6/SerialDraw-Software.git"
+    },
+    "author": "TilenS and JurijTSL",
+    "devDependencies": {
+        "electron": "^5.0.5",
+        "electron-rebuild": "^1.8.5"
+    },
+    "dependencies": {
+        "custom-electron-titlebar": "^3.2.4",
+        "serialport": "^7.1.5",
+        "tableify": "^1.1.0"
+    }
+}
