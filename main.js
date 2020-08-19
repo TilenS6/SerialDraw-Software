@@ -7,6 +7,7 @@ const BrowserWindow = electron.BrowserWindow
 const path = require('path')
 const url = require('url')
 const { Menu } = require('electron')
+const DiscordRPC = require('discord-rpc');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -32,7 +33,7 @@ function createWindow() {
     }))
 
     // Open the DevTools.
-    //mainWindow.webContents.openDevTools()
+    mainWindow.webContents.openDevTools()
 
     // Emitted when the window is closed.
     mainWindow.on('closed', function() {
@@ -72,5 +73,38 @@ app.on('activate', function() {
     }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+// Set this to your Client ID.
+const clientId = '738447687615250463';
+
+// Only needed if you want to use spectate, join, or ask to join
+DiscordRPC.register(clientId);
+
+const rpc = new DiscordRPC.Client({ transport: 'ipc' });
+const startTimestamp = new Date();
+
+async function setActivity() {
+    if (!rpc || !mainWindow) {
+        return;
+    }
+
+    const boops = await mainWindow.webContents.executeJavaScript('window.boops');
+    rpc.setActivity({
+        details: `booped ${boops} times`,
+        state: 'in slither party',
+        largeImageKey: 'smiley',
+        largeImageText: 'SerialDraw by TilenS and JurijTSL',
+        smallImageKey: 'arduino_comm_icon',
+        smallImageText: 'Running on Arduino',
+        instance: false,
+    });
+}
+
+rpc.on('ready', () => {
+    setActivity();
+
+    setInterval(() => {
+        setActivity();
+    }, 15e3);
+});
+
+rpc.login({clientId}).catch(console.error);
