@@ -13,7 +13,7 @@
     },
     "author": "TilenS and JurijTSL",
     "devDependencies": {
-        "electron": "^5.0.5",
+        "electron": "^9.4.0",
         "electron-rebuild": "^1.8.5"
     },
     "dependencies": {
