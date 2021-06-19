@@ -1,0 +1,23 @@
+{
+	"name": "serialdraw-software",
+	"version": "1.0.0",
+	"description": "",
+	"main": "app.js",
+	"scripts": {
+		"start": "electron ."
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/TilenS6/SerialDraw-Software.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/TilenS6/SerialDraw-Software/issues"
+	},
+	"homepage": "https://github.com/TilenS6/SerialDraw-Software",
+	"devDependencies": {
+		"electron": "^13.1.2"
+	}
+}
